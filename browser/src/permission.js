@@ -14,36 +14,35 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
  * @returns {*}
  */
 function hasPermission(userPerms, routerPerm) {
-  //特殊值，*代表所有资源权限
-  if(userPerms.some(p=>p.val=="*")) return true;
-  //如果菜单路由上没有声明perm属性，默认显示该菜单，代表所有人可以访问
-  if(!routerPerm) return true;
-  //判断用户的资源权限集合中是否包含该菜单路由声明的资源权限
-  return userPerms.some(p=>p.val==routerPerm)
+  // 特殊值，*代表所有资源权限
+  if (userPerms.some(p => p.val === '*')) return true
+  // 如果菜单路由上没有声明perm属性，默认显示该菜单，代表所有人可以访问
+  if (!routerPerm) return true
+  // 判断用户的资源权限集合中是否包含该菜单路由声明的资源权限
+  return userPerms.some(p => p.val === routerPerm)
 }
 
-const loginRoute = "/login"
-const whiteList = new Set([loginRoute,'/authredirect'])// no redirect whitelist
+const loginRoute = '/login'
+const whiteList = new Set([loginRoute, '/authredirect'])// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
-
   NProgress.start()
-  let token = getToken();
-  let hasToken = token != 'undefined' && token != undefined && token !=null && token != '';
+  const token = getToken()
+  const hasToken = token !== 'undefined' && token !== undefined && token !== null && token !== ''
 
   if (hasToken) {
     // 1.有token
-    if (to.path == loginRoute) {
+    if (to.path === loginRoute) {
       // 1.1 如果是去登录页，有token视为已登录，直接跳到首页
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
       // 1.2 如果不是去登录页，判断是否有访问权限
-      if(store.getters.visitor){
+      if (store.getters.visitor) {
         // 1.2.1 若该标记为true,是因为GetUserInfo返回结果发现用户信息中roles或perms为空数组，即未配置任何角色或权限，
         // 所以视为游客visitor给放行，放行后游客只能看到公共可以访问的菜单(即src/router/index.js中没有配置perm属性的路由)。
         next()
-      }else if (!store.getters.perms || store.getters.perms.length === 0) {
+      } else if (!store.getters.perms || store.getters.perms.length === 0) {
         // 1.2.2 检查发现不是游客且未加载用户权限信息，应该调用接口加载用户权限信息
         // 用户刷新页面会导致vuex状态清空，或者用户首次登录，vuex中还没有权限信息。都要调用后台接口获得用户信息
         store.dispatch('GetUserInfo').then(res => {
@@ -70,8 +69,8 @@ router.beforeEach((to, from, next) => {
   } else {
     // 2.没有token
     // 如果要访问的路由在白名单中，直接进入；否则，重定向到登录页面
-    whiteList.has(to.path) ? next() : next(loginRoute);
-    NProgress.done();
+    whiteList.has(to.path) ? next() : next(loginRoute)
+    NProgress.done()
   }
 })
 
