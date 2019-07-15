@@ -1,0 +1,8 @@
+// el-date-picker 两个时间同时显示时，中间的”至"字的宽度
+.el-range-editor--mini .el-range-separator,.el-range-editor--medium .el-range-separator{
+    min-width: 35px;
+  }
+.el-table__body tr:hover>td {background-color: #fff !important}
+.el-table__body tr.current-row>td {background-color: #fff !important}
+.el-table__footer .summaries-label {padding: 0px}
+.el-table__footer .summaries-label .cell {text-align: center;font-weight: bold}

@@ -5,6 +5,19 @@
     transition: margin-left .28s;
     margin-left: 180px;
   }
+  //顶栏 topbar container
+  .topbar-container{
+    height:$topBarHeight !important;
+    width:100%;
+    position:fixed;
+    background:$topBarBg;
+    font-size: 0px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2000;
+    overflow: hidden;
+  }
   // 侧边栏
   .sidebar-container {
     transition: width 0.28s;
